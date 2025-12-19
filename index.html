@@ -3,55 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión Junior - Autocompletado</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>Gestión Los Olivos</title>
     <style>
-        :root { --p: #0056b3; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 15px; }
-        .container { max-width: 650px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none; }
+        :root { --olivos: #005aab; --fondo: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 700px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .full { grid-column: span 2; }
-        label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #444; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        input[readonly] { background-color: #f8f9fa; color: #666; }
-        button { background: #007bff; color: white; border: none; padding: 15px; border-radius: 6px; width: 100%; font-size: 16px; margin-top: 15px; cursor: pointer; font-weight: bold; }
-        #login-box { text-align: center; margin-top: 80px; }
+        h2 { color: var(--olivos); text-align: center; margin-top: 0; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #333; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        input[readonly] { background: #eee; }
+        button { background: #28a745; color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        button:disabled { background: #ccc; }
     </style>
 </head>
 <body>
 
-    <div id="login-box">
-        <h2>Inicia Sesión con tu Correo Corporativo</h2>
-        <div id="g_id_onload" data-client_id="TU_ID_CLIENTE_GOOGLE" data-callback="handleCredentialResponse"></div>
-        <div class="g_id_signin" data-type="standard"></div>
-    </div>
-
-    <div class="container" id="form-content">
-        <h2 style="color:var(--p); text-align:center;">Registro de Gestión</h2>
-        <form id="formFinal">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://losolivos.co/logo.png" alt="Los Olivos" style="width:150px;">
+        </div>
+        <h2>Registro de Gestión</h2>
+        <form id="gestioForm">
             <div class="grid">
                 <div class="full">
-                    <label>Usuario Autenticado</label>
-                    <input type="text" name="usuario" id="userEmail" readonly>
+                    <label>Tu Nombre / Usuario</label>
+                    <input type="text" name="usuario" placeholder="Ej: Juan Perez" required>
                 </div>
-
+                
                 <div class="full">
                     <label>Cuenta (Empresa) - Escribe para buscar</label>
-                    <input type="text" name="cuenta" id="searchCuenta" placeholder="Escriba nombre de la empresa..." autocomplete="off" required list="listaEmpresas">
-                    <datalist id="listaEmpresas"></datalist>
+                    <input type="text" name="cuenta" id="busquedaEmpresa" list="empresasData" autocomplete="off" required>
+                    <datalist id="empresasData"></datalist>
                 </div>
 
                 <div>
                     <label>NIT</label>
-                    <input type="text" name="nit" id="resNIT" readonly>
+                    <input type="text" name="nit" id="nitEmpresa" readonly>
                 </div>
                 <div>
                     <label>Código de Cuenta</label>
-                    <input type="text" name="codigo_cuenta" id="resCodigo" readonly>
+                    <input type="text" name="codigo_cuenta" id="codigoEmpresa" readonly>
                 </div>
 
                 <div>
-                    <label>Código de Usuario</label>
+                    <label>Código Usuario (Vendedor)</label>
                     <input type="text" name="codigo_usuario" required>
                 </div>
                 <div>
@@ -60,71 +57,62 @@
                 </div>
 
                 <div class="full">
-                    <button type="submit" id="submitBtn">Enviar a Google Sheets</button>
+                    <label>Observaciones</label>
+                    <textarea name="observaciones" rows="3"></textarea>
                 </div>
             </div>
+            <button type="submit" id="btnEnviar">Guardar Gestión</button>
         </form>
     </div>
 
     <script>
-        const SCRIPT_URL = 'TU_URL_DE_APPS_SCRIPT_AQUI';
-        const DOMINIO = "tuempresa.com"; 
-        let empresasEnMemoria = [];
+        // PEGA AQUÍ TU URL DE APPS SCRIPT
+        const SCRIPT_URL = "https://script.google.com/a/macros/losolivos.co/s/AKfycbwQe-Cyg1y9Ujpdm0XmhiMkc0QxYmmkt_5RALz8Y4HaoZsiCjs0bdxoF1L4iKoWq39d/exec"; 
 
-        // 1. Manejo del Login
-        function handleCredentialResponse(response) {
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
-            if (payload.hd === DOMINIO) {
-                document.getElementById('login-box').style.display = 'none';
-                document.getElementById('form-content').style.display = 'block';
-                document.getElementById('userEmail').value = payload.email;
-            } else {
-                alert("Acceso denegado.");
-            }
-        }
+        let cacheEmpresas = [];
 
-        // 2. Búsqueda "Where Like"
-        const inputBusqueda = document.getElementById('searchCuenta');
-        const datalist = document.getElementById('listaEmpresas');
-
+        // Búsqueda dinámica "Where Like"
+        const inputBusqueda = document.getElementById('busquedaEmpresa');
         inputBusqueda.addEventListener('input', function() {
-            const query = this.value;
-            if (query.length > 3) {
-                fetch(`${SCRIPT_URL}?q=${encodeURIComponent(query)}`)
-                    .then(r => r.json())
+            if (this.value.length > 3) {
+                fetch(`${SCRIPT_URL}?q=${encodeURIComponent(this.value)}`)
+                    .then(res => res.json())
                     .then(data => {
-                        empresasEnMemoria = data;
-                        datalist.innerHTML = '';
-                        data.forEach(emp => {
+                        cacheEmpresas = data;
+                        const dl = document.getElementById('empresasData');
+                        dl.innerHTML = '';
+                        data.forEach(e => {
                             let opt = document.createElement('option');
-                            opt.value = emp.nombre;
-                            datalist.appendChild(opt);
+                            opt.value = e.nombre;
+                            dl.appendChild(opt);
                         });
                     });
             }
             
-            // Auto-completar NIT y Código si hay coincidencia exacta
-            const match = empresasEnMemoria.find(e => e.nombre === query);
-            if (match) {
-                document.getElementById('resNIT').value = match.nit;
-                document.getElementById('resCodigo').value = match.codigo;
+            // Auto-completar NIT y Código
+            const found = cacheEmpresas.find(e => e.nombre === this.value);
+            if (found) {
+                document.getElementById('nitEmpresa').value = found.nit;
+                document.getElementById('codigoEmpresa').value = found.codigo;
             }
         });
 
-        // 3. Envío de Datos
-        document.getElementById('formFinal').addEventListener('submit', e => {
+        // Enviar Formulario
+        document.getElementById('gestioForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerText = "Procesando...";
+            const btn = document.getElementById('btnEnviar');
+            btn.disabled = true; btn.innerText = "Enviando...";
 
-            fetch(SCRIPT_URL, { method: 'POST', body: new FormData(e.target)})
-            .then(() => {
-                alert("Datos guardados con éxito.");
-                e.target.reset();
-                btn.disabled = false;
-                btn.innerText = "Enviar a Google Sheets";
-            });
+            fetch(SCRIPT_URL, { method: 'POST', body: new FormData(this) })
+                .then(() => {
+                    alert("¡Éxito! Datos guardados.");
+                    this.reset();
+                    btn.disabled = false; btn.innerText = "Guardar Gestión";
+                })
+                .catch(err => {
+                    alert("Error al enviar. Intente de nuevo.");
+                    btn.disabled = false; btn.innerText = "Guardar Gestión";
+                });
         });
     </script>
 </body>
