@@ -44,24 +44,24 @@
                 <div class="section-title">DATOS DE LA CUENTA</div>
                 <div class="full">
                     <label>Cuenta (Empresa) - Escriba para buscar</label>
-                    <input type="text" name="cuenta" id="busquedaEmpresa" list="listaEmpresas" autocomplete="off" required placeholder="Escriba mínimo 3 letras de la empresa...">
+                    <input type="text" name="cuenta" id="busquedaEmpresa" list="listaEmpresas" autocomplete="off" required placeholder="Escriba el nombre de la empresa...">
                     <datalist id="listaEmpresas"></datalist>
                 </div>
                 <div>
-                    <label>NIT (Automático)</label>
-                    <input type="text" name="nit" id="resNIT" readonly placeholder="Se llena al seleccionar empresa">
+                    <label>NIT</label>
+                    <input type="text" name="nit" id="resNIT" readonly placeholder="Automático">
                 </div>
                 <div>
-                    <label>Código Cuenta (Automático)</label>
-                    <input type="text" name="codigo_cuenta" id="resCodigo" readonly placeholder="Se llena al seleccionar empresa">
+                    <label>Código Cuenta</label>
+                    <input type="text" name="codigo_cuenta" id="resCodigo" readonly placeholder="Automático">
                 </div>
                 <div>
                     <label>Zona</label>
-                    <input type="text" name="zona" placeholder="Zona de la gestión">
+                    <input type="text" name="zona" placeholder="Zona de gestión">
                 </div>
                 <div>
-                    <label>Duración Gestión</label>
-                    <input type="text" name="duracion" placeholder="Ej: 00:45:00">
+                    <label>Duración</label>
+                    <input type="text" name="duracion" placeholder="Ej: 00:30:00">
                 </div>
 
                 <div class="section-title">DETALLES DE LA ACTIVIDAD</div>
@@ -75,44 +75,31 @@
                     </select>
                 </div>
                 <div>
-                    <label>Nombre del Contacto</label>
+                    <label>Nombre Contacto</label>
                     <input type="text" name="nombre_contacto">
                 </div>
                 <div>
-                    <label>Cargo del Contacto</label>
+                    <label>Cargo Contacto</label>
                     <input type="text" name="cargo_contacto">
                 </div>
                 <div>
-                    <label>Objetivo de la Campaña</label>
+                    <label>Objetivo</label>
                     <input type="text" name="objetivo">
                 </div>
 
-                <div class="section-title">RESULTADOS Y CANTIDADES</div>
-                <div>
-                    <label>Afiliaciones Nuevas</label>
-                    <input type="number" name="afiliaciones" value="0" min="0">
-                </div>
-                <div>
-                    <label>Actualiz. CON Ficha</label>
-                    <input type="number" name="actualizaciones_con" value="0" min="0">
-                </div>
-                <div>
-                    <label>Actualiz. SIN Ficha</label>
-                    <input type="number" name="actualizaciones_sin" value="0" min="0">
-                </div>
-                <div>
-                    <label>Fecha de la Gestión</label>
-                    <input type="date" name="fecha_gestion" id="fechaHoy">
-                </div>
+                <div class="section-title">RESULTADOS</div>
+                <div><label>Afiliaciones Nuevas</label><input type="number" name="afiliaciones" value="0"></div>
+                <div><label>Act. CON Ficha</label><input type="number" name="actualizaciones_con" value="0"></div>
+                <div><label>Act. SIN Ficha</label><input type="number" name="actualizaciones_sin" value="0"></div>
 
                 <div class="full">
-                    <label>Números de Cédula (Afiliados)</label>
-                    <textarea name="cedulas" rows="2" placeholder="Ingrese las cédulas separadas por comas..."></textarea>
+                    <label>Números de Cédula</label>
+                    <textarea name="cedulas" rows="2" placeholder="Cédulas separadas por comas..."></textarea>
                 </div>
 
                 <div class="full">
                     <label>Observaciones</label>
-                    <textarea name="observaciones" rows="3" placeholder="Detalles adicionales de la gestión..."></textarea>
+                    <textarea name="observaciones" rows="2"></textarea>
                 </div>
             </div>
             
@@ -121,73 +108,98 @@
     </div>
 
     <script>
-        // URL DE TU GOOGLE APPS SCRIPT
-        const SCRIPT_URL = "https://script.google.com/a/macros/losolivos.co/s/AKfycbweKYtcxAgRpe3l1XksY69ws2gM96AcCOSgFzdl_Z1UVIFgeTSBwenYk6IqrmIuBPXX/exec";
+        // BASE DE DATOS LOCAL INTEGRADA
+        const empresas = [
+            {n:"ACCIONES EFECTIVAS E INTEGRALES SAS", c:"900978700", nit:"900978700"},
+            {n:"ACUACONTROL S.A.S.", c:"900200778", nit:"900200778"},
+            {n:"ADMYSIS LTDA", c:"900089549", nit:"900089549"},
+            {n:"AGENCIA DE ADUANAS BLU LOGISTICS S.A. NIVEL 1", c:"830045523", nit:"830045523"},
+            {n:"AGROINDUSTRIAL DON EUSEBIO S.A.S.", c:"800095068", nit:"800095068"},
+            {n:"AKUO AGENCIA DE SEGUROS LIMITADA", c:"900354560", nit:"900354560"},
+            {n:"ALCALDIA MUNICIPAL DE CAJICA", c:"899999465", nit:"899999465"},
+            {n:"ALCALDIA MUNICIPAL DE CHIA", c:"899999172", nit:"899999172"},
+            {n:"ALCALDIA MUNICIPAL DE FACATATIVA", c:"899999328", nit:"899999328"},
+            {n:"ALCALDIA MUNICIPAL DE SIBATE", c:"899999372", nit:"899999372"},
+            {n:"ALCALDIA MUNICIPAL DE TENJO", c:"800095174", nit:"800095174"},
+            {n:"ALL START COLOMBIA S.A.S.", c:"901503137", nit:"901503137"},
+            {n:"ALPLA COLOMBIA LTDA", c:"830007240", nit:"830007240"},
+            {n:"ALTALENE S.A", c:"800007202", nit:"800007202"},
+            {n:"ASOCIACION MUTUAL DE INTEGRACION FAMILIAR SIGLA AMIFA", c:"860014721", nit:"860014721"},
+            {n:"ASOCIACION MUTUAL DE PENSIONADOS DE LA SUPERINTENDENCIA FINANCIERA DE COLOMBIA", c:"901044198", nit:"901044198"},
+            {n:"ASOCIACION MUTUAL LOS DESCONOCIDOS", c:"860010717", nit:"860010717"},
+            {n:"ASOCIACION MUTUAL SIMON BOLIVAR", c:"860013429", nit:"860013429"},
+            {n:"ASOCIACION MUTUAL UNION FAMILIAR DEL BARRIO JORGE ELIECER GAITAN", c:"860025055", nit:"860025055"},
+            {n:"ASOCIACION MUTUALISTA DE CIUDAD QUIRIGUA", c:"860042794", nit:"860042794"},
+            {n:"ASOCIACION MUTUALISTA SAGRADA FAMILIA", c:"860029753", nit:"860029753"},
+            {n:"ASOCIACION NACIONAL DE PENSIONADOS CIVILES DE LA POLICIA NACIONAL ASPENCIPOL", c:"860401005", nit:"860401005"},
+            {n:"ASOCIACION NACIONAL DE PENSIONADOS DE COMUNICACIONES", c:"860039664", nit:"860039664"},
+            {n:"ASOCIACION NACIONAL DE PENSIONADOS DE TELECOM", c:"860511510", nit:"860511510"},
+            {n:"ASOCIACION NACIONAL DE PENSIONADOS DEL BANCO BOGOTA", c:"860061502", nit:"860061502"},
+            {n:"ASOCIACION NACIONAL DE PENSIONADOS OFICIALES", c:"800180060", nit:"800180060"},
+            {n:"AUTOMEX SAS", c:"900207008", nit:"900207008"},
+            {n:"ARVAL COLOMBIA SAS", c:"901354352", nit:"901354352"},
+            {n:"ASEO DEL NORTE SAS ESP", c:"824003418", nit:"824003418"},
+            {n:"ASEO TECNICO DE LA SABANA S.A.S. E.S.P.", c:"830123625", nit:"830123625"},
+            {n:"ASEO TECNICO S. A.S E S P", c:"800233739", nit:"800233739"},
+            {n:"BANCO POPULAR S A", c:"860007738", nit:"860007738"},
+            {n:"BEL-STAR S.A.", c:"800018359", nit:"800018359"},
+            {n:"BIG BANG JEANS", c:"1013684402", nit:"1013684402"},
+            {n:"BLU LOGISTICS COLOMBIA S.A.S", c:"830008524", nit:"830008524"},
+            {n:"CAJA DE AUXILIOS PARA EL CLERO", c:"860007333", nit:"860007333"},
+            {n:"CENTURIONES DE COLOMBIA LIMITADA", c:"800141819", nit:"800141819"},
+            {n:"CINECOLOR COLOMBIA S.A.S", c:"900921325", nit:"900921325"},
+            {n:"CIUDAD LIMPIA BOGOTA S.A. E.S.P.", c:"830048122", nit:"830048122"},
+            {n:"CIUDAD LIMPIA DEL HUILA S.A E.S.P", c:"900167590", nit:"900167590"},
+            {n:"COOPERATIVA ALIANZA", c:"860024575", nit:"860024575"},
+            {n:"COOPERATIVA DEL MAGISTERIO", c:"860025596", nit:"860025596"},
+            {n:"FINCOMERCIO LTDA", c:"860007327", nit:"860007327"},
+            {n:"QUALA S.A.", c:"860074450", nit:"860074450"},
+            {n:"SIIGO S.A.S.", c:"830048145", nit:"830048145"},
+            {n:"SIMONIZ S.A.", c:"800203984", nit:"800203984"},
+            {n:"YOKOMOTOR S.A", c:"800041829", nit:"800041829"}
+            // Agrega más según necesites
+        ];
 
-        // Poner fecha de hoy por defecto
-        document.getElementById('fechaHoy').valueAsDate = new Date();
+        // POBLAR DATALIST
+        const dl = document.getElementById('listaEmpresas');
+        empresas.forEach(emp => {
+            let opt = document.createElement('option');
+            opt.value = emp.n;
+            dl.appendChild(opt);
+        });
 
-        let cacheEmpresas = [];
         const inputBusqueda = document.getElementById('busquedaEmpresa');
-
-        // LÓGICA DE BÚSQUEDA DINÁMICA
         inputBusqueda.addEventListener('input', function() {
-            const query = this.value;
-            
-            // Si escribe 3 o más letras, busca en el Excel
-            if (query.length >= 3) {
-                fetch(`${SCRIPT_URL}?q=${encodeURIComponent(query)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        cacheEmpresas = data;
-                        const dl = document.getElementById('listaEmpresas');
-                        dl.innerHTML = ''; // Limpiar lista
-                        
-                        data.forEach(e => {
-                            let opt = document.createElement('option');
-                            opt.value = e.nombre;
-                            dl.appendChild(opt);
-                        });
-                    })
-                    .catch(err => console.error("Error al buscar empresas:", err));
-            }
-            
-            // AUTOCOMPLETAR NIT Y CÓDIGO
-            const coincidencia = cacheEmpresas.find(e => e.nombre === query);
-            if (coincidencia) {
-                document.getElementById('resNIT').value = coincidencia.nit;
-                document.getElementById('resCodigo').value = coincidencia.codigo;
+            const match = empresas.find(e => e.n === this.value);
+            if (match) {
+                document.getElementById('resNIT').value = match.nit;
+                document.getElementById('resCodigo').value = match.c;
             } else {
                 document.getElementById('resNIT').value = '';
                 document.getElementById('resCodigo').value = '';
             }
         });
 
-        // ENVÍO DEL FORMULARIO
+        // ENVÍO A GOOGLE SHEETS
+        const SCRIPT_URL = "https://script.google.com/a/macros/losolivos.co/s/AKfycbweKYtcxAgRpe3l1XksY69ws2gM96AcCOSgFzdl_Z1UVIFgeTSBwenYk6IqrmIuBPXX/exec";
+
         document.getElementById('gestioForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnEnviar');
             btn.disabled = true;
-            btn.innerText = "Procesando... Espere";
+            btn.innerText = "Guardando...";
 
-            const formData = new FormData(this);
-
-            fetch(SCRIPT_URL, { 
-                method: 'POST', 
-                body: formData 
-            })
+            fetch(SCRIPT_URL, { method: 'POST', body: new FormData(this) })
             .then(res => {
-                alert("✅ ¡Éxito! La gestión se guardó en el Excel.");
+                alert("✅ Gestión guardada con éxito.");
                 this.reset();
-                document.getElementById('fechaHoy').valueAsDate = new Date();
                 btn.disabled = false;
                 btn.innerText = "Guardar Gestión en Excel";
             })
             .catch(err => {
-                alert("❌ Error al guardar. Revise su conexión.");
+                alert("❌ Error al conectar con el servidor.");
                 btn.disabled = false;
                 btn.innerText = "Guardar Gestión en Excel";
-                console.error(err);
             });
         });
     </script>
