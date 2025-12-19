@@ -5,39 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión Los Olivos</title>
     <style>
-        :root { --olivos: #005aab; --fondo: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 700px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        :root { --olivos: #005aab; --verde: #28a745; --fondo: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--fondo); display: flex; justify-content: center; padding: 10px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 800px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .full { grid-column: span 2; }
-        h2 { color: var(--olivos); text-align: center; margin-top: 0; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #333; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        input[readonly] { background: #eee; }
-        button { background: #28a745; color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        h2 { color: var(--olivos); text-align: center; margin-top: 0; border-bottom: 2px solid var(--olivos); padding-bottom: 10px; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 12px; color: #444; text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        input[readonly] { background: #f0f0f0; color: #666; }
+        button { background: var(--verde); color: white; border: none; padding: 15px; border-radius: 6px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         button:disabled { background: #ccc; }
+        .section-title { grid-column: span 2; background: #e7eff7; padding: 5px 10px; font-size: 12px; font-weight: bold; color: var(--olivos); margin-top: 10px; border-radius: 4px; }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .full { grid-column: span 1; } .section-title { grid-column: span 1; } }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://losolivos.co/logo.png" alt="Los Olivos" style="width:150px;">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <img src="https://losolivos.co/logo.png" alt="Los Olivos" style="width:140px;">
         </div>
-        <h2>Registro de Gestión</h2>
+        <h2>Registro de Gestión Junior</h2>
+        
         <form id="gestioForm">
             <div class="grid">
-                <div class="full">
-                    <label>Tu Nombre / Usuario</label>
-                    <input type="text" name="usuario" placeholder="Ej: Juan Perez" required>
+                <div class="section-title">DATOS DEL ASESOR</div>
+                <div>
+                    <label>Usuario (Nombre/Correo)</label>
+                    <input type="text" name="usuario" placeholder="Quien registra" required>
                 </div>
-                
-                <div class="full">
-                    <label>Cuenta (Empresa) - Escribe para buscar</label>
-                    <input type="text" name="cuenta" id="busquedaEmpresa" list="empresasData" autocomplete="off" required>
-                    <datalist id="empresasData"></datalist>
+                <div>
+                    <label>Código Usuario</label>
+                    <input type="text" name="codigo_usuario" required>
                 </div>
 
+                <div class="section-title">DATOS DE LA CUENTA</div>
+                <div class="full">
+                    <label>Cuenta (Empresa) - Escribe para buscar</label>
+                    <input type="text" name="cuenta" id="busquedaEmpresa" list="empresasData" autocomplete="off" required placeholder="Escribe nombre de la empresa...">
+                    <datalist id="empresasData"></datalist>
+                </div>
                 <div>
                     <label>NIT</label>
                     <input type="text" name="nit" id="nitEmpresa" readonly>
@@ -46,14 +54,55 @@
                     <label>Código de Cuenta</label>
                     <input type="text" name="codigo_cuenta" id="codigoEmpresa" readonly>
                 </div>
-
-                <div>
-                    <label>Código Usuario (Vendedor)</label>
-                    <input type="text" name="codigo_usuario" required>
-                </div>
                 <div>
                     <label>Zona</label>
                     <input type="text" name="zona">
+                </div>
+                <div>
+                    <label>Duración Gestión</label>
+                    <input type="text" name="duracion" placeholder="Ej: 30 min / 00:30:00">
+                </div>
+
+                <div class="section-title">DETALLES DE LA ACTIVIDAD</div>
+                <div>
+                    <label>Actividad</label>
+                    <select name="actividad">
+                        <option value="CAMPAÑA">CAMPAÑA</option>
+                        <option value="CERRADO GANADO">CERRADO GANADO</option>
+                        <option value="RENOVACIÓN">RENOVACIÓN</option>
+                        <option value="VISITA">VISITA</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Nombre del Contacto</label>
+                    <input type="text" name="nombre_contacto">
+                </div>
+                <div>
+                    <label>Cargo del Contacto</label>
+                    <input type="text" name="cargo_contacto">
+                </div>
+                <div>
+                    <label>Objetivo de la Campaña</label>
+                    <input type="text" name="objetivo">
+                </div>
+
+                <div class="section-title">RESULTADOS Y CANTIDADES</div>
+                <div>
+                    <label>Afiliaciones Nuevas</label>
+                    <input type="number" name="afiliaciones" value="0">
+                </div>
+                <div>
+                    <label>Actualiz. CON Ficha</label>
+                    <input type="number" name="actualizaciones_con" value="0">
+                </div>
+                <div>
+                    <label>Actualiz. SIN Ficha</label>
+                    <input type="number" name="actualizaciones_sin" value="0">
+                </div>
+
+                <div class="full">
+                    <label>Números de Cédula</label>
+                    <textarea name="cedulas" rows="2" placeholder="Separa las cédulas por comas..."></textarea>
                 </div>
 
                 <div class="full">
@@ -66,12 +115,10 @@
     </div>
 
     <script>
-        // PEGA AQUÍ TU URL DE APPS SCRIPT
         const SCRIPT_URL = "https://script.google.com/a/macros/losolivos.co/s/AKfycbwQe-Cyg1y9Ujpdm0XmhiMkc0QxYmmkt_5RALz8Y4HaoZsiCjs0bdxoF1L4iKoWq39d/exec"; 
 
         let cacheEmpresas = [];
 
-        // Búsqueda dinámica "Where Like"
         const inputBusqueda = document.getElementById('busquedaEmpresa');
         inputBusqueda.addEventListener('input', function() {
             if (this.value.length > 3) {
@@ -89,7 +136,6 @@
                     });
             }
             
-            // Auto-completar NIT y Código
             const found = cacheEmpresas.find(e => e.nombre === this.value);
             if (found) {
                 document.getElementById('nitEmpresa').value = found.nit;
@@ -97,20 +143,19 @@
             }
         });
 
-        // Enviar Formulario
         document.getElementById('gestioForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnEnviar');
-            btn.disabled = true; btn.innerText = "Enviando...";
+            btn.disabled = true; btn.innerText = "Guardando en Excel...";
 
             fetch(SCRIPT_URL, { method: 'POST', body: new FormData(this) })
                 .then(() => {
-                    alert("¡Éxito! Datos guardados.");
+                    alert("¡Éxito! Gestión registrada correctamente.");
                     this.reset();
                     btn.disabled = false; btn.innerText = "Guardar Gestión";
                 })
                 .catch(err => {
-                    alert("Error al enviar. Intente de nuevo.");
+                    alert("Error de conexión. Verifica internet.");
                     btn.disabled = false; btn.innerText = "Guardar Gestión";
                 });
         });
