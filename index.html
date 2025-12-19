@@ -3,135 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión Los Olivos</title>
+    <title>Gestión de Comisiones - Los Olivos</title>
     <style>
-        :root { --olivos: #005aab; --fondo: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); padding: 15px; display: flex; justify-content: center; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 750px; }
+        :root { --olivos: #005aab; --verde: #28a745; --fondo: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--fondo); display: flex; justify-content: center; padding: 10px; margin: 0; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 800px; margin-bottom: 20px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .full { grid-column: span 2; }
-        label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        input[readonly] { background: #eee; font-weight: bold; color: var(--olivos); }
-        .section-title { grid-column: span 2; background: var(--olivos); color: white; padding: 8px; border-radius: 4px; font-size: 14px; margin-top: 10px; }
-        button { background: #28a745; color: white; border: none; padding: 15px; border-radius: 6px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .full { grid-column: span 1; } }
+        h2 { color: var(--olivos); text-align: center; margin-top: 0; border-bottom: 2px solid var(--olivos); padding-bottom: 10px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 12px; color: #444; text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        input[readonly] { background: #f0f0f0; color: var(--olivos); font-weight: bold; }
+        .section-title { grid-column: span 2; background: #e7eff7; padding: 8px 12px; font-size: 13px; font-weight: bold; color: var(--olivos); margin-top: 15px; border-radius: 4px; border-left: 4px solid var(--olivos); }
+        button { background: var(--verde); color: white; border: none; padding: 16px; border-radius: 6px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        button:hover { background: #218838; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .full, .section-title { grid-column: span 1; } }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2 style="text-align:center; color:var(--olivos)">Gestión de Comisiones</h2>
-    <form id="gestioForm">
-        <div class="grid">
-            <div class="section-title">DATOS DEL ASESOR</div>
-            <div>
-                <label>Usuario (Nombre)</label>
-                <input type="text" name="usuario" required>
-            </div>
-            <div>
-                <label>Código Usuario</label>
-                <input type="text" name="codigo_usuario" required>
-            </div>
-
-            <div class="section-title">DATOS DE LA CUENTA</div>
-            <div class="full">
-                <label>Cuenta (Empresa) - Escriba para filtrar</label>
-                <input type="text" name="cuenta" id="busquedaEmpresa" list="listaEmpresas" placeholder="Escriba nombre de la empresa..." autocomplete="off" required>
-                <datalist id="listaEmpresas"></datalist>
-            </div>
-            <div>
-                <label>NIT (Automático)</label>
-                <input type="text" name="nit" id="resNIT" readonly>
-            </div>
-            <div>
-                <label>Código de Cuenta (Automático)</label>
-                <input type="text" name="codigo_cuenta" id="resCodigo" readonly>
-            </div>
-            <div>
-                <label>Zona</label>
-                <input type="text" name="zona">
-            </div>
-            <div>
-                <label>Duración</label>
-                <input type="text" name="duracion" placeholder="00:00:00">
-            </div>
-
-            <div class="section-title">DETALLES DE ACTIVIDAD</div>
-            <div>
-                <label>Actividad</label>
-                <select name="actividad">
-                    <option value="CAMPAÑA">CAMPAÑA</option>
-                    <option value="RENOVACIÓN">RENOVACIÓN</option>
-                    <option value="VISITA">VISITA</option>
-                </select>
-            </div>
-            <div>
-                <label>Nombre Contacto</label>
-                <input type="text" name="nombre_contacto">
-            </div>
-            <div class="full">
-                <label>Objetivo</label>
-                <input type="text" name="objetivo">
-            </div>
-
-            <div class="section-title">RESULTADOS</div>
-            <div><label>Afiliaciones</label><input type="number" name="afiliaciones" value="0"></div>
-            <div><label>Act. Con Ficha</label><input type="number" name="actualizaciones_con" value="0"></div>
-
-            <div class="full">
-                <label>Observaciones</label>
-                <textarea name="observaciones" rows="3"></textarea>
-            </div>
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <img src="https://losolivos.co/logo.png" alt="Los Olivos" style="width:160px;">
         </div>
-        <button type="submit" id="btnEnviar">Guardar Registro</button>
-    </form>
-</div>
-
-<script>
-    const SCRIPT_URL = "https://script.google.com/a/macros/losolivos.co/s/AKfycbweKYtcxAgRpe3l1XksY69ws2gM96AcCOSgFzdl_Z1UVIFgeTSBwenYk6IqrmIuBPXX/exec"; // <-- PEGA TU URL AQUÍ
-    let cacheEmpresas = [];
-
-    // LÓGICA DE BÚSQUEDA "WHERE LIKE"
-    const inputBusqueda = document.getElementById('busquedaEmpresa');
-    inputBusqueda.addEventListener('input', function() {
-        const query = this.value;
-        if (query.length >= 3) {
-            fetch(`${SCRIPT_URL}?q=${encodeURIComponent(query)}`)
-                .then(res => res.json())
-                .then(data => {
-                    cacheEmpresas = data;
-                    const dl = document.getElementById('listaEmpresas');
-                    dl.innerHTML = '';
-                    data.forEach(e => {
-                        let opt = document.createElement('option');
-                        opt.value = e.nombre;
-                        dl.appendChild(opt);
-                    });
-                });
-        }
+        <h2>Registro de Gestión Junior</h2>
         
-        // Autocompletar NIT y Código al seleccionar
-        const match = cacheEmpresas.find(e => e.nombre === query);
-        if (match) {
-            document.getElementById('resNIT').value = match.nit;
-            document.getElementById('resCodigo').value = match.codigo;
-        }
-    });
+        <form id="gestioForm">
+            <div class="grid">
+                <div class="section-title">DATOS DEL ASESOR</div>
+                <div>
+                    <label>Usuario (Nombre Completo)</label>
+                    <input type="text" name="usuario" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div>
+                    <label>Código Usuario</label>
+                    <input type="text" name="codigo_usuario" placeholder="Su código de asesor" required>
+                </div>
 
-    // ENVÍO DE FORMULARIO
-    document.getElementById('gestioForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('btnEnviar');
-        btn.disabled = true; btn.innerText = "Enviando...";
+                <div class="section-title">DATOS DE LA CUENTA</div>
+                <div class="full">
+                    <label>Cuenta (Empresa) - Escriba para buscar</label>
+                    <input type="text" name="cuenta" id="busquedaEmpresa" list="listaEmpresas" autocomplete="off" required placeholder="Escriba mínimo 3 letras de la empresa...">
+                    <datalist id="listaEmpresas"></datalist>
+                </div>
+                <div>
+                    <label>NIT (Automático)</label>
+                    <input type="text" name="nit" id="resNIT" readonly placeholder="Se llena al seleccionar empresa">
+                </div>
+                <div>
+                    <label>Código Cuenta (Automático)</label>
+                    <input type="text" name="codigo_cuenta" id="resCodigo" readonly placeholder="Se llena al seleccionar empresa">
+                </div>
+                <div>
+                    <label>Zona</label>
+                    <input type="text" name="zona" placeholder="Zona de la gestión">
+                </div>
+                <div>
+                    <label>Duración Gestión</label>
+                    <input type="text" name="duracion" placeholder="Ej: 00:45:00">
+                </div>
 
-        fetch(SCRIPT_URL, { method: 'POST', body: new FormData(this) })
-            .then(() => {
-                alert("¡Guardado correctamente!");
+                <div class="section-title">DETALLES DE LA ACTIVIDAD</div>
+                <div>
+                    <label>Actividad</label>
+                    <select name="actividad">
+                        <option value="CAMPAÑA">CAMPAÑA</option>
+                        <option value="VISITA">VISITA</option>
+                        <option value="RENOVACIÓN">RENOVACIÓN</option>
+                        <option value="CERRADO GANADO">CERRADO GANADO</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Nombre del Contacto</label>
+                    <input type="text" name="nombre_contacto">
+                </div>
+                <div>
+                    <label>Cargo del Contacto</label>
+                    <input type="text" name="cargo_contacto">
+                </div>
+                <div>
+                    <label>Objetivo de la Campaña</label>
+                    <input type="text" name="objetivo">
+                </div>
+
+                <div class="section-title">RESULTADOS Y CANTIDADES</div>
+                <div>
+                    <label>Afiliaciones Nuevas</label>
+                    <input type="number" name="afiliaciones" value="0" min="0">
+                </div>
+                <div>
+                    <label>Actualiz. CON Ficha</label>
+                    <input type="number" name="actualizaciones_con" value="0" min="0">
+                </div>
+                <div>
+                    <label>Actualiz. SIN Ficha</label>
+                    <input type="number" name="actualizaciones_sin" value="0" min="0">
+                </div>
+                <div>
+                    <label>Fecha de la Gestión</label>
+                    <input type="date" name="fecha_gestion" id="fechaHoy">
+                </div>
+
+                <div class="full">
+                    <label>Números de Cédula (Afiliados)</label>
+                    <textarea name="cedulas" rows="2" placeholder="Ingrese las cédulas separadas por comas..."></textarea>
+                </div>
+
+                <div class="full">
+                    <label>Observaciones</label>
+                    <textarea name="observaciones" rows="3" placeholder="Detalles adicionales de la gestión..."></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" id="btnEnviar">Guardar Gestión en Excel</button>
+        </form>
+    </div>
+
+    <script>
+        // URL DE TU GOOGLE APPS SCRIPT
+        const SCRIPT_URL = "https://script.google.com/a/macros/losolivos.co/s/AKfycbweKYtcxAgRpe3l1XksY69ws2gM96AcCOSgFzdl_Z1UVIFgeTSBwenYk6IqrmIuBPXX/exec";
+
+        // Poner fecha de hoy por defecto
+        document.getElementById('fechaHoy').valueAsDate = new Date();
+
+        let cacheEmpresas = [];
+        const inputBusqueda = document.getElementById('busquedaEmpresa');
+
+        // LÓGICA DE BÚSQUEDA DINÁMICA
+        inputBusqueda.addEventListener('input', function() {
+            const query = this.value;
+            
+            // Si escribe 3 o más letras, busca en el Excel
+            if (query.length >= 3) {
+                fetch(`${SCRIPT_URL}?q=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        cacheEmpresas = data;
+                        const dl = document.getElementById('listaEmpresas');
+                        dl.innerHTML = ''; // Limpiar lista
+                        
+                        data.forEach(e => {
+                            let opt = document.createElement('option');
+                            opt.value = e.nombre;
+                            dl.appendChild(opt);
+                        });
+                    })
+                    .catch(err => console.error("Error al buscar empresas:", err));
+            }
+            
+            // AUTOCOMPLETAR NIT Y CÓDIGO
+            const coincidencia = cacheEmpresas.find(e => e.nombre === query);
+            if (coincidencia) {
+                document.getElementById('resNIT').value = coincidencia.nit;
+                document.getElementById('resCodigo').value = coincidencia.codigo;
+            } else {
+                document.getElementById('resNIT').value = '';
+                document.getElementById('resCodigo').value = '';
+            }
+        });
+
+        // ENVÍO DEL FORMULARIO
+        document.getElementById('gestioForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnEnviar');
+            btn.disabled = true;
+            btn.innerText = "Procesando... Espere";
+
+            const formData = new FormData(this);
+
+            fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                body: formData 
+            })
+            .then(res => {
+                alert("✅ ¡Éxito! La gestión se guardó en el Excel.");
                 this.reset();
-                btn.disabled = false; btn.innerText = "Guardar Registro";
+                document.getElementById('fechaHoy').valueAsDate = new Date();
+                btn.disabled = false;
+                btn.innerText = "Guardar Gestión en Excel";
+            })
+            .catch(err => {
+                alert("❌ Error al guardar. Revise su conexión.");
+                btn.disabled = false;
+                btn.innerText = "Guardar Gestión en Excel";
+                console.error(err);
             });
-    });
-</script>
+        });
+    </script>
 </body>
 </html>
